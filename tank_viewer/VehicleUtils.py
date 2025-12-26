@@ -1,12 +1,10 @@
-
-
-from .common import *
-from .ResourceManager import ResourceManager
-
 import gettext
 import sqlite3
 from xml.etree import ElementTree as ET
 from dataclasses import dataclass
+
+from .common import *
+from .ResourceManager import ResourceManager
 
 
 __all__ = ('WotDataManager', 'g_LevelsL10n', 'g_NationsL10n', 'g_CategoryL10n')
@@ -539,7 +537,10 @@ class WotDataManager:
 
     def loadVehicleDictionary(self):
         for (idx, nation_path) in TankListPaths.INDEX.items():
-            listNodes = self.res_mgr.open_scripts_xml(nation_path / 'list.xml')
+            try:
+                listNodes = self.res_mgr.open_scripts_xml(nation_path / 'list.xml')
+            except Exception:
+                continue
 
             if listNodes is None:
                 continue
