@@ -9,6 +9,7 @@ from .v1_1_0 import BWT2_Section_1_1_0
 from .v1_4_0 import BWT2_Section_1_4_0
 from .v1_6_1 import BWT2_Section_1_6_1
 from .v1_39_0_RU import BWT2_Section_1_39_0_RU
+from .v1_42_0_RU import BWT2_Section_1_42_0_RU
 
 
 
