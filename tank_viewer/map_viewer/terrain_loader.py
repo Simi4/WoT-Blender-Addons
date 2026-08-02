@@ -542,7 +542,11 @@ def load_terrain(col, ctx: LoaderContext):
 
         for i, layer in enumerate(layers):
             layer_am_img = get_image(ctx, layer.name)
-            layer_am_img.alpha_mode = 'PREMUL'
+            if layer_am_img is not None:
+                layer_am_img.alpha_mode = 'PREMUL'
+            else:
+                # TODO: find out this case
+                logger.warning(f"Failed to load layer_am_img={layer.name}")
             if map_viewer_load_normals:
                 layer_nm_img = get_image(ctx, layer.name_nm)
                 if layer_nm_img:
