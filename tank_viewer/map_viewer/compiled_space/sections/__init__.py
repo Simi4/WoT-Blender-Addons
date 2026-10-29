@@ -996,7 +996,7 @@ CompiledSpaceSections(
 
 
 # Tested with:
-# '1.39.0.0_RU' # actual
+# '1.39.0.0_RU'
 CompiledSpaceSections(
     Version((1, 39, 0, 0), Realm.RU),
     (

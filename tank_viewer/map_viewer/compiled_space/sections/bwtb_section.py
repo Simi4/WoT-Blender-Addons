@@ -24,6 +24,7 @@ class Row:
 			'BWCS', # in WorldOfTanks.exe: CompiledSpaceSettings
 			'BWSG', # in WorldOfTanks.exe: StaticGeometry
 			'BSGD', # in WorldOfTanks.exe: StaticGeometryData
+			'BSID',
 			'BWT2', # in WorldOfTanks.exe: Terrain2SceneFeature
 			'BSMI', # in WorldOfTanks.exe: StaticSceneModelInstances
 			'BSMO', # in WorldOfTanks.exe: Static Model
@@ -51,6 +52,7 @@ class Row:
 			'WSMO',
 			'BWS2',
 			'BSG2',
+			'BSI2',
 			'WGMM', # in WorldOfTanks.exe: MegalodsFeature
 			'GOBJ',
 			'BWVL',
