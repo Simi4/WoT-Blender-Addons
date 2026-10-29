@@ -6,7 +6,7 @@ The plugin is intended for viewing 3D models of tanks from the game World of Tan
 
 ### Installation ###
 
-Requirements: [Blender](https://www.blender.org/) 4.3 or newer
+Requirements: [Blender](https://www.blender.org/) 5.2 or newer
 
 1. [Download plugin](https://github.com/Simi4/WoT-Blender-Addons/archive/refs/heads/main.zip).
 1. Place folder `tank_viewer` from downloaded archive to `C:\Program Files\Blender Foundation\Blender\*<version>*\scripts\addons_core`

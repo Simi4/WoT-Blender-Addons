@@ -142,7 +142,7 @@ class BigWorldModelLoader:
             dataMesh = LoadDataMesh(unp_primitives_file, vres_name, pres_name, uv2_name, new_ext_format)
 
             bmesh.vertices.add(len(dataMesh.vertices))
-            bmesh.vertices.foreach_set('co', unpack_list(dataMesh.vertices))
+            bmesh.vertices.foreach_set('co', dataMesh.vertices.ravel())
 
             # TODO:
             # bmesh.vertices.foreach_set('normal', unpack_list(dataMesh.normal_list))
@@ -154,7 +154,7 @@ class BigWorldModelLoader:
             bmesh.polygons.foreach_set('loop_total', (3,) * nbr_faces)
 
             bmesh.loops.add(nbr_faces * 3)
-            bmesh.loops.foreach_set('vertex_index', unpack_list(dataMesh.indices))
+            bmesh.loops.foreach_set('vertex_index', dataMesh.indices.ravel())
 
             nbr_faces = len(bmesh.polygons)
             bmesh.polygons.foreach_set('use_smooth', [True] * nbr_faces)
@@ -266,8 +266,8 @@ class BigWorldModelLoader:
 
                     bmesh.materials.append(material)
 
-                    startIndex = dataMesh.PrimitiveGroups[_index]['startIndex'] // 3
-                    endPrimitives = startIndex + dataMesh.PrimitiveGroups[_index]['nPrimitives']
+                    startIndex = dataMesh.PrimitiveGroups[_index].startIndex // 3
+                    endPrimitives = startIndex + dataMesh.PrimitiveGroups[_index].nPrimitives
 
                     for fidx, pl in enumerate(bmesh.polygons):
                         if startIndex <= fidx <= endPrimitives:
