@@ -195,13 +195,12 @@ def unpack_blend_textures(fr, chunk_name: str) -> list:
 
 
 @cache
-def get_chunk_faces(width: int) -> list:
-    faces = []
-    for i in range(0, width * width - width - 1):
-        if (i + 1) % width == 0:
-            continue
-        faces.append((i + 1, i, i + width, i + width + 1))
-    return faces
+def get_chunk_faces(width: int) -> np.ndarray:
+    if width < 2:
+        return np.empty((0, 4), dtype=np.int32)
+
+    base = np.arange(width * (width - 1), dtype=np.int32).reshape(width - 1, width)[:, :-1].ravel()
+    return np.stack((base + 1, base, base + width, base + width + 1), axis=1)
 
 
 def unpack_heights(fr, chunk_name: str, chunk_size: float):
@@ -226,20 +225,29 @@ def unpack_heights(fr, chunk_name: str, chunk_size: float):
     # FIXME: NEED TO CHECK THIS
     third = np.where(third > 0.5, third - 1.0039216, third)
     out = (first + (second * 256) + third * 65536) / scaleFactor
-    out = out.reshape((png_width, png_height))
+    out = out.reshape((png_height, png_width))
 
-    verts = []
-
-    XY = np.linspace(0, chunk_size, png_width)
-
-    for ix in range(png_width):
-        for iy in range(png_height):
-            verts.append(((XY[ix], XY[iy], out[png_height - iy - 1][ix])))
+    x = np.linspace(0, chunk_size, png_width, dtype=np.float32)
+    y = np.linspace(0, chunk_size, png_height, dtype=np.float32)
+    verts = np.empty((png_width, png_height, 3), dtype=np.float32)
+    verts[..., 0] = x[:, None]
+    verts[..., 1] = y[None, :]
+    verts[..., 2] = out[::-1, :].T
+    verts = verts.reshape(-1, 3)
 
     faces = get_chunk_faces(png_width)
+    face_count = len(faces)
 
     bmesh = bpy.data.meshes.new(f'Mesh_{chunk_name}')
-    bmesh.from_pydata(verts, [], faces)
+    bmesh.vertices.add(len(verts))
+    bmesh.vertices.foreach_set('co', verts.ravel())
+
+    bmesh.polygons.add(face_count)
+    bmesh.polygons.foreach_set('loop_start', np.arange(0, faces.size, 4, dtype=np.int32))
+    bmesh.polygons.foreach_set('loop_total', np.full(face_count, 4, dtype=np.int32))
+
+    bmesh.loops.add(faces.size)
+    bmesh.loops.foreach_set('vertex_index', faces.ravel())
 
     return bmesh
 
