@@ -173,18 +173,14 @@ class BigWorldModelLoader:
                 uv_faces.name = 'uv1'
                 uv_faces.active = True
 
-                uv_layer = bmesh.uv_layers['uv1'].data[:]
-                uv2_layer = bmesh.uv_layers[uv2_name].data[:] if uv2_faces else None
-
-                for poly in bmesh.polygons:
-                    for li in poly.loop_indices:
-                        vi = bmesh.loops[li].vertex_index
-                        uv_layer[li].uv = dataMesh.uv_list[vi]
-                        if uv2_name:
-                            uv2_layer[li].uv = dataMesh.uv2_list[vi]
+                loop_vertex_indices = dataMesh.indices.ravel()
+                uv_faces.data.foreach_set('uv', dataMesh.uv_list[loop_vertex_indices].ravel())
+                if uv2_faces:
+                    uv2_faces.data.foreach_set('uv', dataMesh.uv2_list[loop_vertex_indices].ravel())
             else:
                 logger.warning('uv_faces is None')
 
+            polygon_material_indices = [0] * nbr_faces
             for primitiveGroup in renderSet.findall('geometry/primitiveGroup'):
                 _identifier = primitiveGroup.findtext('material/identifier').strip()
                 _index = AsInt(primitiveGroup.text)
@@ -265,14 +261,13 @@ class BigWorldModelLoader:
                     setBigWorldMaterial(_shader_name, material, uv2_name, propertiesGroup)
 
                     bmesh.materials.append(material)
+                    material_slot = len(bmesh.materials) - 1
 
                     startIndex = dataMesh.PrimitiveGroups[_index].startIndex // 3
                     endPrimitives = startIndex + dataMesh.PrimitiveGroups[_index].nPrimitives
+                    polygon_material_indices[startIndex:endPrimitives] = [material_slot] * (endPrimitives - startIndex)
 
-                    for fidx, pl in enumerate(bmesh.polygons):
-                        if startIndex <= fidx <= endPrimitives:
-                            pl.material_index = _index
-
+            bmesh.polygons.foreach_set('material_index', polygon_material_indices)
             bmesh.validate()
             bmesh.update()
 

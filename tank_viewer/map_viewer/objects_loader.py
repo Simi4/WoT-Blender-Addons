@@ -323,22 +323,14 @@ def load_mesh(dataMesh: LoadDataMesh_v2, mesh: UniversalMesh, name: str) -> bpy.
     uv_layer = bmesh.uv_layers.new()
     uv_layer.name = 'uv1'
     uv_layer.active = True
-    uv_layer = uv_layer.data[:]
     uv_list = dataMesh.get_uv_by_id(mesh.pg_idx)
-    for poly in bmesh.polygons:
-        for li in poly.loop_indices:
-            vi = bmesh.loops[li].vertex_index
-            uv_layer[li].uv = uv_list[vi]
+    uv_layer.data.foreach_set('uv', uv_list[indices.ravel()].ravel())
 
     if dataMesh.uv2_list is not None:
         uv2_layer = bmesh.uv_layers.new()
         uv2_layer.name = 'uv2'
-        uv2_layer = uv2_layer.data[:]
         uv2_list = dataMesh.get_uv2_by_id(mesh.pg_idx)
-        for poly in bmesh.polygons:
-            for li in poly.loop_indices:
-                vi = bmesh.loops[li].vertex_index
-                uv2_layer[li].uv = uv2_list[vi]
+        uv2_layer.data.foreach_set('uv', uv2_list[indices.ravel()].ravel())
 
     return bmesh
 

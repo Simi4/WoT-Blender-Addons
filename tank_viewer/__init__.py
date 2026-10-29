@@ -2,7 +2,7 @@ bl_info = {
     'name': 'World of Tanks - Map & Vehicle Viewer',
     'author': 'Simi4',
     'version': (0, 3, 0),
-    'blender': (4, 3, 0),
+    'blender': (5, 2, 0),
     'location': 'View3D > Sidebar > TankViewer',
     'description': 'WoT Tank Viewer',
     'doc_url': 'https://kr.cm/f/t/28240/',
