@@ -7,7 +7,7 @@ __all__ = ('g_BigWorldModelLoader',)
 
 import os
 
-from .LoadDataMesh import LoadDataMesh
+from .primitives.primitives_reader import PrimitivesReader
 from .BigWorldMaterial import *
 from .common import *
 
@@ -16,6 +16,17 @@ import bpy
 from mathutils import Vector  # type: ignore
 from bpy_extras.image_utils import load_image  # type: ignore
 from bpy_extras.io_utils import unpack_list  # type: ignore
+
+
+# xzy to xyz
+flip_mat = Matrix(
+    (
+        (1, 0, 0, 0),
+        (0, 0, 1, 0),
+        (0, 1, 0, 0),
+        (0, 0, 0, 1),
+    )
+)
 
 
 #####################################################################
@@ -112,7 +123,8 @@ class BigWorldModelLoader:
         else:
             primitives_filepath = visual_filepath.replace('.visual', '.primitives')
 
-        unp_primitives_file = res_mgr.open_file(primitives_filepath)
+        with res_mgr.open_file(primitives_filepath) as primitives_file:
+            primitives_data = primitives_file.read()
 
         if visual_xml.find('renderSet') is None:
             logger.warning('renderSet is None')
@@ -139,44 +151,40 @@ class BigWorldModelLoader:
                 if 'uv2' in stream_res_name:
                     uv2_name = stream_res_name
 
-            dataMesh = LoadDataMesh(unp_primitives_file, vres_name, pres_name, uv2_name, new_ext_format)
+            primitives = PrimitivesReader(primitives_data, vres_name, pres_name, uv2_name)
 
-            bmesh.vertices.add(len(dataMesh.vertices))
-            bmesh.vertices.foreach_set('co', dataMesh.vertices.ravel())
+            bmesh.vertices.add(len(primitives.vertices))
+            bmesh.vertices.foreach_set('co', primitives.vertices.ravel())
 
-            # TODO:
-            # bmesh.vertices.foreach_set('normal', unpack_list(dataMesh.normal_list))
+            bmesh.normals_split_custom_set_from_vertices(primitives.normals)
 
-            nbr_faces = len(dataMesh.indices)
+            nbr_faces = len(primitives.indices)
             bmesh.polygons.add(nbr_faces)
 
             bmesh.polygons.foreach_set('loop_start', range(0, nbr_faces * 3, 3))
             bmesh.polygons.foreach_set('loop_total', (3,) * nbr_faces)
 
             bmesh.loops.add(nbr_faces * 3)
-            bmesh.loops.foreach_set('vertex_index', dataMesh.indices.ravel())
-
-            nbr_faces = len(bmesh.polygons)
-            bmesh.polygons.foreach_set('use_smooth', [True] * nbr_faces)
+            bmesh.loops.foreach_set('vertex_index', primitives.indices.ravel())
 
             uv2_faces = None
             if uv2_name:
-                if dataMesh.uv2_list is not None:
+                if primitives.uv2_list is not None:
                     uv2_faces = bmesh.uv_layers.new()
                     uv2_name = bpy.path.clean_name(uv2_name)
                     uv2_faces.name = uv2_name
                 else:
                     uv2_name = ''
 
-            if dataMesh.uv_list is not None:
+            if primitives.uv_list is not None:
                 uv_faces = bmesh.uv_layers.new()
                 uv_faces.name = 'uv1'
                 uv_faces.active = True
 
-                loop_vertex_indices = dataMesh.indices.ravel()
-                uv_faces.data.foreach_set('uv', dataMesh.uv_list[loop_vertex_indices].ravel())
+                loop_vertex_indices = primitives.indices.ravel()
+                uv_faces.data.foreach_set('uv', primitives.uv_list[loop_vertex_indices].ravel())
                 if uv2_faces:
-                    uv2_faces.data.foreach_set('uv', dataMesh.uv2_list[loop_vertex_indices].ravel())
+                    uv2_faces.data.foreach_set('uv', primitives.uv2_list[loop_vertex_indices].ravel())
             else:
                 logger.warning('uv_faces is None')
 
@@ -263,11 +271,15 @@ class BigWorldModelLoader:
                     bmesh.materials.append(material)
                     material_slot = len(bmesh.materials) - 1
 
-                    startIndex = dataMesh.PrimitiveGroups[_index].startIndex // 3
-                    endPrimitives = startIndex + dataMesh.PrimitiveGroups[_index].nPrimitives
-                    polygon_material_indices[startIndex:endPrimitives] = [material_slot] * (endPrimitives - startIndex)
+                    group = primitives.primitive_groups[_index]
+                    start_index = group.start_index // 3
+                    end_index = start_index + group.primitive_count
+                    polygon_material_indices[start_index:end_index] = [material_slot] * (
+                        end_index - start_index
+                    )
 
             bmesh.polygons.foreach_set('material_index', polygon_material_indices)
+            bmesh.transform(flip_mat)
             bmesh.validate()
             bmesh.update()
 
@@ -306,8 +318,6 @@ class BigWorldModelLoader:
                     ob_mod_Curve = ob.modifiers.new('Curve', 'CURVE')
                     ob_mod_Curve.object = cu_ob
                     ob_mod_Curve.deform_axis = 'NEG_Y'
-
-        del unp_primitives_file
 
 
 g_BigWorldModelLoader = BigWorldModelLoader()

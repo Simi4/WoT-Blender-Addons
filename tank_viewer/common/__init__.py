@@ -29,19 +29,6 @@ g_XmlUnpacker = XmlUnpacker()
 
 
 #####################################################################
-# decorators
-
-def disable_undo(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        use_global_undo_orig = user_preferences.edit.use_global_undo
-        user_preferences.edit.use_global_undo = False
-        func(*args, **kwargs)
-        user_preferences.edit.use_global_undo = use_global_undo_orig
-    return wrapper
-
-
-#####################################################################
 # functions
 
 def load_image_from_memory(data: bytes, name: str) -> bpy.types.Image:
@@ -67,9 +54,7 @@ def tv_AsMatrix4x4T(vector_str):
 
 
 def tv_AsBool(bool_str):
-    if 'true' in bool_str.lower():
-        return True
-    return False
+    return 'true' in bool_str.lower()
 
 
 def AsInt(int_str):
@@ -85,38 +70,3 @@ def StrToFilePath(path_str: Optional[str]) -> Path:
     if path_str is not None:
         return '/'.join(path_str.strip().split('\\'))
 tv_AsNormPath = StrToFilePath
-
-
-def tv_UnpackNormal(packed):
-    pky = (packed>>22)&0x1FF
-    pkz = (packed>>11)&0x3FF
-    pkx = packed&0x3FF
-    x = pkx/1023.0
-    if pkx & (1<<10):
-        x = -x
-    y = pky/511.0
-    if pky & (1<<9):
-        y = -y
-    z = pkz/1023.0
-    if pkz & (1<<10):
-        z = -z
-    return Vector((x, z, y))
-
-
-def tv_UnpackNormal_tag3(packed):
-    pkz = (packed>>16)&0xFF^0xFF
-    pky = (packed>>8)&0xFF^0xFF
-    pkx = packed&0xFF^0xFF
-    if pkx > 0x7f:
-        x = -float(pkx&0x7f)/0x7f
-    else:
-        x = float(pkx^0x7f)/0x7f
-    if pky > 0x7f:
-        y = -float(pky&0x7f)/0x7f
-    else:
-        y = float(pky^0x7f)/0x7f
-    if pkz>0x7f:
-        z = -float(pkz&0x7f)/0x7f
-    else:
-        z = float(pkz^0x7f)/0x7f
-    return Vector((x, z, y))

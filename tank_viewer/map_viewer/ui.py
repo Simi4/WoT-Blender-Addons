@@ -13,7 +13,6 @@ wot_parse_status = False
 current_map_info = None
 
 
-@disable_undo
 def delete_map():
     if col := bpy.data.collections.get('Map Collection'):
         bpy.data.collections.remove(col)

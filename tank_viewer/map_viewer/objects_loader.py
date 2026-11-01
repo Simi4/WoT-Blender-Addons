@@ -8,9 +8,9 @@ from mathutils import Matrix, Vector  # type: ignore
 
 # local imports
 from ..common import logger
+from ..primitives.primitives_reader import PrimitivesReader
 from .atlas_loader import load_atlas, load_atlas_dds
 from .compiled_space.universal_space import UniversalMesh
-from .LoadDataMesh_v2 import LoadDataMesh_v2
 from .loader_context import LoaderContext
 from .terrain_loader import get_image
 
@@ -303,14 +303,16 @@ def load_material(name: str, umesh: UniversalMesh, ctx: LoaderContext):
     return material
 
 
-def load_mesh(dataMesh: LoadDataMesh_v2, mesh: UniversalMesh, name: str) -> bpy.types.Mesh:
-    verts = dataMesh.get_vertices_by_id(mesh.pg_idx)
+def load_mesh(primitives: PrimitivesReader, mesh: UniversalMesh, name: str) -> bpy.types.Mesh:
+    verts = primitives.get_vertices_by_id(mesh.pg_idx)
 
     bmesh = bpy.data.meshes.new(f'mesh_{name}_{mesh.rset_id}_{mesh.pg_idx}')
     bmesh.vertices.add(len(verts))
-    bmesh.vertices.foreach_set('co', verts.flatten())
+    bmesh.vertices.foreach_set('co', verts.ravel())
 
-    indices = dataMesh.get_indices_by_id(mesh.pg_idx)
+    bmesh.normals_split_custom_set_from_vertices(primitives.get_normals_by_id(mesh.pg_idx))
+
+    indices = primitives.get_indices_by_id(mesh.pg_idx)
     nbr_faces = len(indices)
     bmesh.polygons.add(nbr_faces)
 
@@ -318,18 +320,18 @@ def load_mesh(dataMesh: LoadDataMesh_v2, mesh: UniversalMesh, name: str) -> bpy.
     bmesh.polygons.foreach_set('loop_total', (3,) * nbr_faces)
 
     bmesh.loops.add(nbr_faces * 3)
-    bmesh.loops.foreach_set('vertex_index', indices.flatten())
+    bmesh.loops.foreach_set('vertex_index', indices.ravel())
 
     uv_layer = bmesh.uv_layers.new()
     uv_layer.name = 'uv1'
     uv_layer.active = True
-    uv_list = dataMesh.get_uv_by_id(mesh.pg_idx)
+    uv_list = primitives.get_uv_by_id(mesh.pg_idx)
     uv_layer.data.foreach_set('uv', uv_list[indices.ravel()].ravel())
 
-    if dataMesh.uv2_list is not None:
+    if primitives.uv2_list is not None:
         uv2_layer = bmesh.uv_layers.new()
         uv2_layer.name = 'uv2'
-        uv2_list = dataMesh.get_uv2_by_id(mesh.pg_idx)
+        uv2_list = primitives.get_uv2_by_id(mesh.pg_idx)
         uv2_layer.data.foreach_set('uv', uv2_list[indices.ravel()].ravel())
 
     return bmesh
@@ -342,13 +344,13 @@ def load_objects(col: bpy.types.Collection, ctx: LoaderContext):
             continue
 
         with ctx.res_mgr.open(model.prims_name) as f:
-            dataMesh = LoadDataMesh_v2(f, model.verts_dataname, model.prims_dataname)
+            primitives = PrimitivesReader(f.read(), model.verts_dataname, model.prims_dataname, None)
 
         name = bpy.path.display_name_from_filepath(model.prims_name)
 
         for instances in model.instances:
             for umesh in instances.meshes:
-                bmesh = load_mesh(dataMesh, umesh, name)
+                bmesh = load_mesh(primitives, umesh, name)
                 material = load_material(f'{name}_{umesh.pg_idx}', umesh, ctx)
                 bmesh.materials.append(material)
 

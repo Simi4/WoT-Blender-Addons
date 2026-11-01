@@ -61,7 +61,6 @@ class PluginData:
 g_PluginData = PluginData()
 
 
-@disable_undo
 def loadModels(col, model_list: list, scene: Any):
     check_tex_in_res_mode = scene.texture_location == 'custom'
 
@@ -91,7 +90,6 @@ def loadModels(col, model_list: list, scene: Any):
             )
 
 
-@disable_undo
 def deleteModels():
     if 'Tank Collection' in bpy.data.collections:
         col = bpy.data.collections['Tank Collection']
