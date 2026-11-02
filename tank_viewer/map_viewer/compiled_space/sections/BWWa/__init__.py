@@ -3,7 +3,7 @@
 from .v0_9_12 import BWWa_Section_0_9_12
 from .v1_0_0 import BWWa_Section_1_0_0
 from .v1_22_0 import BWWa_Section_1_22_0
-
+from .v1_46_0_ru import BWWa_Section_1_46_0_RU
 
 
 """

@@ -4,6 +4,14 @@ from ._base_section import *
 
 
 class Base_Binary_Section(Base_Section):
+    def from_bin_stream(self, stream, row):
+        stream.seek(row.position)
+        self._data = stream.read(row.length)
+        self._exist = True
+
+    def to_bin(self):
+        return self._data
+
     def unp_to_dir(self, unp_dir: Path):
         with (unp_dir / f'{self.header}.bin').open('wb') as fw:
             fw.write(self._data)
