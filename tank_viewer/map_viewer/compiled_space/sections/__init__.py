@@ -1086,7 +1086,7 @@ CompiledSpaceSections(
         BSG2_Section_1_1_0,
         BSI2_Section_1_46_0_RU,
         BWT2_Section_1_42_0_RU,
-        BSMI_Section_1_32_0_RU,
+        BSMI_Section_1_46_0_RU,
         BSMO_Section_1_16_1,
         BSMA_Section_1_37_0_RU,
         SpTr_Section_1_0_0,
