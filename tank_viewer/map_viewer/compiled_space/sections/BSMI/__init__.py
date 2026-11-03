@@ -10,3 +10,4 @@ from .v1_12_1 import BSMI_Section_1_12_1
 from .v1_16_1 import BSMI_Section_1_16_1
 from .v1_31_0_ru import BSMI_Section_1_31_0_RU
 from .v1_32_0_ru import BSMI_Section_1_32_0_RU
+from .v1_46_0_ru import BSMI_Section_1_46_0_RU
