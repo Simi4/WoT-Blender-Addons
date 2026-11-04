@@ -88,7 +88,7 @@ def load_maps_dictionary():
         maps_list.append((len(maps_list), map_name, map_l10n_name))
 
     # dirty hack to add hangars to map list
-    hangars = ['hangar_v3', 'h02_mt_bday_2023', 'h33_battle_royale_2021', 'h33_comp7']
+    hangars = ['h08_mt_hangar', 'h13_mt_portal_2025', 'h33_battle_royale_2021', 'h33_comp7', 'h00_armory_yard', 'h16_mt_museum']
     for h_name in hangars:
         if (GlobalVars.wot_res_path / 'packages' / f'{h_name}.pkg').is_file():
             maps_list.append((len(maps_list), h_name, h_name))
