@@ -16,15 +16,15 @@ class Row:
 		(self.header, self.int1,
 		self.position, self.int3,
 		self.length, self.rows_num) = unpack('<4s5I', data)
-		self.header = self.header.decode('ascii')
-		assert self.header in [
+		self.header = self.header.decode('ascii') 
+		assert self.header in [ # sub_1403EF690 win64/Tanki.exe a5: "..." or sub_1403EF870 win64/Tanki.exe a4: "..."
 			'BWTB',
 			'BWST', # in WorldOfTanks.exe: StringTable
 			'BWAL', # in WorldOfTanks.exe: AssetList
 			'BWCS', # in WorldOfTanks.exe: CompiledSpaceSettings
 			'BWSG', # in WorldOfTanks.exe: StaticGeometry
 			'BSGD', # in WorldOfTanks.exe: StaticGeometryData
-			'BSID',
+			'BSID', # BigWorld Static Index Data
 			'BWT2', # in WorldOfTanks.exe: Terrain2SceneFeature
 			'BSMI', # in WorldOfTanks.exe: StaticSceneModelInstances
 			'BSMO', # in WorldOfTanks.exe: Static Model
@@ -35,8 +35,8 @@ class Row:
 			'WTCP', # in WorldOfTanks.exe: StaticSceneControlPointHandler::
 			'BWWa', # in WorldOfTanks.exe: StaticSceneWater
 			'BWPs', # in WorldOfTanks.exe: StaticParticlesFeature / ParticleSystemLoader
-			'CENT',
-			'UDOS', # user data object
+			'CENT', # ClientEntities
+			'UDOS', # UserDataObjects
 			'WGDE', # in WorldOfTanks.exe: DestructiblesSceneProvider
 			'BWLC', # in WorldOfTanks.exe: StaticLightsFeature
 			'WTau', # in WorldOfTanks.exe: WoT_StaticSceneAudioHandler
@@ -50,11 +50,11 @@ class Row:
 			'WGDN',
 			'WSMI',
 			'WSMO',
-			'BWS2',
-			'BSG2',
-			'BSI2',
+			'BWS2', # BigWorld Secondary (2) Static Geometry 
+			'BSG2', # BigWorld Secondary (2) Static Geometry Data
+			'BSI2', # BigWorld Secondary (2) Static Index Data
 			'WGMM', # in WorldOfTanks.exe: MegalodsFeature
-			'GOBJ',
+			'GOBJ', # Game Objects aka GameObjectPrefab
 			'BWVL',
 			# 'BWTS', # in WorldOfTanks.exe: StaticTextureStreamingSceneProvider
 		], self.header
