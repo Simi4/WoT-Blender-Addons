@@ -1091,7 +1091,7 @@ CompiledSpaceSections(
         BSMA_Section_1_37_0_RU,
         SpTr_Section_1_0_0,
         WGSD_Section_1_22_0,
-        WTCP_Section_1_23_0,
+        WTCP_Section_1_46_0_RU,
         BWWa_Section_1_46_0_RU,
         BWEP_Section_1_0_0,
         WGCO_Section_1_0_1,
