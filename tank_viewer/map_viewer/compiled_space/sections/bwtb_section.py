@@ -44,12 +44,12 @@ class Row:
 			'WTbl', # in WorldOfTanks.exe: WoT_BenchmarkLocationsTypes
 			'WGSH', # in WorldOfTanks.exe: SHVolumeSceneProvider
 			'WGCO', # in WorldOfTanks.exe: SpatialFeature
-			'BWSS',
-			'BWSV',
-			'BWSP',
-			'WGDN',
-			'WSMI',
-			'WSMO',
+			'BWSS', # deprecated/eu
+			'BWSV', # deprecated/eu
+			'BWSP', # deprecated/eu
+			'WGDN', # deprecated/eu
+			'WSMI', # deprecated/eu
+			'WSMO', # deprecated/eu
 			'BWS2', # BigWorld Secondary (2) Static Geometry 
 			'BSG2', # BigWorld Secondary (2) Static Geometry Data
 			'BSI2', # BigWorld Secondary (2) Static Index Data
