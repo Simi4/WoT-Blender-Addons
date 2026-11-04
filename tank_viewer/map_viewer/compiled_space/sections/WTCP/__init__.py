@@ -3,7 +3,7 @@
 from .v0_9_12 import WTCP_Section_0_9_12
 from .v0_9_20 import WTCP_Section_0_9_20
 from .v1_23_0 import WTCP_Section_1_23_0
-
+from .v1_46_0_ru import WTCP_Section_1_46_0_RU
 
 
 """
