@@ -1,5 +1,8 @@
 """ WSMO (WoT Static Models) """
 
+# EN: This section is deprecated and kept for backward compatibility.
+# RU: Данная секция устарела. Она оставлена для обратной совместимости. 
+
 from ctypes import c_float, c_uint32
 from .._base_json_section import *
 
