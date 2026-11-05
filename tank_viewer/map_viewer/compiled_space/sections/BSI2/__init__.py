@@ -1,4 +1,4 @@
-""" BSI2 (?) """
+""" BSI2 (BigWorld Secondary Static Index Data) """
 
 from .._base_binary_section import *
 

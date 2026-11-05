@@ -18,7 +18,7 @@ class Row:
 		self.length, self.rows_num) = unpack('<4s5I', data)
 		self.header = self.header.decode('ascii') 
 		assert self.header in [ # sub_1403EF690 win64/Tanki.exe a5: "..." or sub_1403EF870 win64/Tanki.exe a4: "..."
-			'BWTB',
+			'BWTB', # Root Table
 			'BWST', # in WorldOfTanks.exe: StringTable
 			'BWAL', # in WorldOfTanks.exe: AssetList
 			'BWCS', # in WorldOfTanks.exe: CompiledSpaceSettings

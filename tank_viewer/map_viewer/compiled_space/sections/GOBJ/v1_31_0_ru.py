@@ -1,4 +1,4 @@
-""" GOBJ (?) """
+""" GOBJ (Game Objects) """
 
 from .._base_json_section import *
 from .v1_12_1 import ComplexObject_v1_12_1

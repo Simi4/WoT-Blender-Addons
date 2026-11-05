@@ -1,4 +1,4 @@
-""" BSID (?) """
+""" BSID (BigWorld Static Index Data) """
 
 from .._base_binary_section import *
 

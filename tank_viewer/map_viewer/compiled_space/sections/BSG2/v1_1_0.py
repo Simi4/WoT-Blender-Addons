@@ -1,4 +1,4 @@
-﻿""" BSG2 (?) """
+﻿""" BSG2 (BigWorld Secondary Static Geometry Data) """
 
 from .._base_binary_section import *
 
