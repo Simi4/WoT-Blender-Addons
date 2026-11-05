@@ -1,4 +1,4 @@
-""" CENT (Content?) """
+""" CENT (ClientEntities) """
 
 from .._base_xml_section import *
 
