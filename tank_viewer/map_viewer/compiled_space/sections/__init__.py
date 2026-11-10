@@ -998,7 +998,7 @@ CompiledSpaceSections(
 
 
 # Tested with:
-# '1.39.0.0_RU'
+# '1.39.0.0_RU' # actual
 CompiledSpaceSections(
     Version((1, 39, 0, 0), Realm.RU),
     (
@@ -1035,7 +1035,7 @@ CompiledSpaceSections(
 
 
 # Tested with:
-# '1.42.0.0_RU'
+# '1.42.0.0_RU' # actual
 CompiledSpaceSections(
     Version((1, 42, 0, 0), Realm.RU),
     (
@@ -1087,10 +1087,10 @@ CompiledSpaceSections(
         BSI2_Section_1_46_0_RU,
         BWT2_Section_1_42_0_RU,
         BSMI_Section_1_46_0_RU,
-        BSMO_Section_1_16_1,
+        BSMO_Section_1_46_0_RU,
         BSMA_Section_1_37_0_RU,
         SpTr_Section_1_0_0,
-        WGSD_Section_1_22_0,
+        WGSD_Section_1_46_0_RU,
         WTCP_Section_1_46_0_RU,
         BWWa_Section_1_46_0_RU,
         BWEP_Section_1_0_0,
@@ -1103,7 +1103,7 @@ CompiledSpaceSections(
         BWVL_Section_1_15_0,
         WTau_Section_1_6_0,
         WTbl_Section_0_9_20,
-        WGSH_Section_1_0_0,
+        WGSH_Section_1_46_0_RU,
         WGMM_Section_1_4_0,
         GOBJ_Section_1_31_0_RU
     )

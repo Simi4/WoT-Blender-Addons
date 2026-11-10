@@ -1,3 +1,4 @@
+""" WTCP (WoT static scene Control Point) """
 from ctypes import c_float, c_uint32
 from .._base_json_section import *
 

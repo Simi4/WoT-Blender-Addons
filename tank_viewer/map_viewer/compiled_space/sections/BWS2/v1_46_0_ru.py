@@ -1,4 +1,4 @@
-""" BWS2 (?) """
+""" BWS2 (BigWorld Secondary Static Geometry) """
 
 from ..BWSG import BWSG_Section_1_46_0_RU
 

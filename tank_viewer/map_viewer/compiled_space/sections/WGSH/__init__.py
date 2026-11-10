@@ -2,6 +2,7 @@
 
 from .v0_9_20 import WGSH_Section_0_9_20
 from .v1_0_0 import WGSH_Section_1_0_0
+from .v1_46_0_ru import WGSH_Section_1_46_0_RU
 
 
 
